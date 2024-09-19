@@ -171,7 +171,6 @@ module.exports = function (Topics) {
 			}
 			return areTagsAllowed(topic, filterTags);
 		}
-		
 		topicData.forEach((topic) => {
 			if (shouldIncludeTopic(topic, filterCids, filterTags, blockedUids)) {
 				if (isTopicsFollowed[topic.tid] ||
