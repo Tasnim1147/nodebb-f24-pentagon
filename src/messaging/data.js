@@ -86,7 +86,7 @@ module.exports = function (Messaging) {
 					// Also check if the previous message was a new set, in which case we don't add a spacer
 					// Also check if the previous message was a system message, in which case we don't add a spacer
 					// Also check if the previous message was a new set, in which case we don't add a spacer
-					if (message.timestamp > messages[index - 1].timestamp + Messaging.newMessageCutoff() ||
+					if (message.timestamp > messages[index - 1].timestamp + Messaging.newMessageCutoff ||
                         message.fromUid !== messages[index - 1].fromUid ||
                         messages[index - 1].system) {
 						message.newSet = true;
