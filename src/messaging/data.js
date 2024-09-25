@@ -79,7 +79,6 @@ module.exports = function (Messaging) {
 		if (messages.length > 1) {
 			// Add a spacer in between messages with time gaps between them
 			messages = messages.map((message, index) => {
-				if (index > 0) {
 					if (message.timestamp > messages[index - 1].timestamp + Messaging.newMessageCutoff ||
                         message.fromUid !== messages[index - 1].fromUid ||
                         messages[index - 1].system) {
