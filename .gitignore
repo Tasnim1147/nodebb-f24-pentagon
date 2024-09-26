@@ -22,6 +22,8 @@ feeds/recent.rss
 logs/
 
 pidfile
+# Ignore Redis dump file
+dump.rdb
 
 # templates
 /public/templates
