@@ -19,6 +19,7 @@ module.exports = function (Posts) {
 		const content = data.content.toString();
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
+		const { isApproved } = data;
 		const { annonymousType } = data;
 
 		if (!uid && parseInt(uid, 10) !== 0) {
@@ -36,6 +37,7 @@ module.exports = function (Posts) {
 			tid: tid,
 			content: content,
 			timestamp: timestamp,
+			isApproved: isApproved,
 			annonymousType: annonymousType,
 		};
 
