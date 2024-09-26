@@ -142,8 +142,7 @@ module.exports = function (Topics) {
 				const mainPid = await Topics.getTopicField(postData.tid, 'mainPid');
 				pids = [mainPid];
 			}
-			const prevPosts = await posts.getPostsFields(pids, ['pid', 'uid', 'timestamp', 'tid', 
-									    'content', 'annonymousType']);
+			const prevPosts = await posts.getPostsFields(pids, ['pid', 'uid', 'timestamp', 'tid', 'content', 'annonymousType']);
 			isBlocked = prevPosts.every(checkBlocked);
 			start += postsPerIteration;
 			stop = start + postsPerIteration - 1;
