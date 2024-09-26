@@ -87,7 +87,7 @@ module.exports = function (Messaging) {
 				}
 
 				return message;
-			});
+			};
 		} else if (messages.length === 1) {
 			// For single messages, we don't know the context, so look up the previous message and compare
 			const key = `chat:room:${roomId}:mids`;
