@@ -210,4 +210,4 @@ async function modifyMessage(message, fields, mid) {
 	});
 
 	return payload.message;
-};
+}
