@@ -179,3 +179,20 @@ Posts.getReplies = async (req, res) => {
 
 	helpers.formatApiResponse(200, res, { replies });
 };
+
+async function markPostAsApproved (pid, uid) => {
+    try {
+        // Fetch the post to check if it exists and retrieve necessary fields
+        const post = await db.getObject(`post:${pid}`);
+        if (!post) {
+            throw new Error(`Post with ID ${pid} not found.`);
+        }
+		/* Possible check for user admin privileges using `uid` */
+
+        post.isApproved = true; 
+        await db.setObject(`post:${pid}`, post); // Save the updated post back to the database
+
+    } catch (error) {
+        console.error(`Error approving post: ${error.message}`);
+    }
+};
