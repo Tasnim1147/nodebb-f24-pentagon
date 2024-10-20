@@ -272,10 +272,14 @@ async function editPostTPL() {
 					},
 					success: function(response) {
 						// Handle success (update UI accordingly)
-						// console.log("Approving successful. isApproved: ")
-						// console.log(isApproved);
-						// console.log("Response:");
-						// console.log(response);
+						console.log("Approving successful. isApproved: ")
+						console.log(isApproved);
+						console.log("Response:");
+						console.log(response);
+						console.log("referring");
+						console.log(response.isApproved);
+						console.log("referring2");
+						console.log(response["isApproved"]);
 						if (response.isApproved) {
 							$button.find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
 							$span.text('Disapprove Post');
