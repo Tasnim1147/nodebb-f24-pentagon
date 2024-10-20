@@ -179,3 +179,31 @@ Posts.getReplies = async (req, res) => {
 
 	helpers.formatApiResponse(200, res, { replies });
 };
+
+async function markPostAsApproved(pid, uid) {
+    try {
+        // 1. Fetch the post by pid
+        const post = await db.getObject(`post:${pid}`);
+        if (!post) {
+            throw new Error(`Post with ID ${pid} not found`);
+        }
+
+       post.isApproved = !post.isApproved;
+
+       await db.setObject(`post:${pid}`, post);
+    } catch (err) {
+        console.error(`Failed to approve post ${pid}:`, err);
+        throw err;
+    }
+}
+
+Posts.approve = async (req, res) => {
+	try {
+		const { pid } = req.params;
+		// Assuming you have a function to mark the post as approved
+		await markPostAsApproved(pid, req.user.id);
+		res.status(200).json({ message: 'Post approved successfully' });
+	} catch (error) {
+		res.status(500).json({ error: 'An error occurred while approving the post' });
+	}
+};
