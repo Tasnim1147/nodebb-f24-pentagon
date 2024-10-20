@@ -191,6 +191,7 @@ async function markPostAsApproved(pid, uid) {
        post.isApproved = !post.isApproved;
 
        await db.setObject(`post:${pid}`, post);
+	   return !post.isApproved;
     } catch (err) {
         console.error(`Failed to approve post ${pid}:`, err);
         throw err;
@@ -198,12 +199,15 @@ async function markPostAsApproved(pid, uid) {
 }
 
 Posts.approve = async (req, res) => {
+	console.log("Trying to approve");
 	try {
+		console.log("Approving post");
 		const { pid } = req.params;
 		// Assuming you have a function to mark the post as approved
-		await markPostAsApproved(pid, req.user.id);
-		res.status(200).json({ message: 'Post approved successfully' });
+		const isApproved = await markPostAsApproved(pid, req.user.id);
+		console.log("Approved post");
+		res.status(200).json({ message: '[Server] Post approved successfully', isApproved: isApproved });
 	} catch (error) {
-		res.status(500).json({ error: 'An error occurred while approving the post' });
+		res.status(500).json({ error: '[Alert] An error occurred while approving the post' });
 	}
 };

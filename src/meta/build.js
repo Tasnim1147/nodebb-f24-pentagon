@@ -235,41 +235,64 @@ async function editPostTPL() {
 				{{{ end }}}`;
 
 		// Define the string to add at line 117
-		const stringToAddAtLine117 = `<button component="post/toggle-button" class="btn-ghost-sm" data-toggle="post-toggle" data-pid="{./pid}" data-csrf-token="{config.csrf_token}" > 
+		const stringToAddAtLine117 = `<button id="post-toggle-button-{./pid}" component="post/toggle-button" class="btn-ghost-sm" data-toggle="post-toggle" data-pid="{./pid}" data-csrf-token="{config.csrf_token}" > 
 			<i class="fa fa-fw fa-toggle-on text-primary"></i>
-			<span class="text-muted">Approve Post</span>
+			<span id="toggle-span-{./pid}" class="text-muted">Approve Post</span>
 		</button>
 		<script>
-    $(document).on('click', '[component="post/toggle-button"]', function() {
-        const postId = $(this).closest('[data-pid]').attr('data-pid'); // get the post ID
-        const isApproved = $(this).find('i').hasClass('fa-toggle-on') ? false : true; // toggle state
-		const csrfToken = $(this).attr('data-csrf-token');
+			$(document).on('click', '[component="post/toggle-button"]', function() {
+				const $this = $(this);
+				const pid = $this.attr('data-pid'); // get the post ID
+				const buttonId = '#post-toggle-button-' + pid; // build button ID
+				const spanId = '#toggle-span-' + pid; // build span ID
+				const csrfToken = $this.attr('data-csrf-token');
+				// Cache jQuery selections
+				const $button = $(buttonId);
+				const $span = $(spanId);
 
-        // Send the approval status to the server
-        $.ajax({
-            url: '/api/v3/posts/' +  postId + '/approve',
-            method: 'PUT',
-            data: { 
-				isApproved: isApproved,
-                csrfToken: csrfToken 
-			},
-            success: function(response) {
-                // Handle success (update UI accordingly)
-                if (isApproved) {
-                    $(this).find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
-                    $(this).find('span').text('Disapprove Post');
-                } else {
-                    $(this).find('i').removeClass('fa-toggle-off').addClass('fa-toggle-on');
-                    $(this).find('span').text('Approve Post');
-                }
-            },
-            error: function(err) {
-                console.error('Error updating post approval status', err);
-            }
-        });
-    });
+				// Check if the button and span exist
+				if (!$button.length || !$span.length) {
+					console.error('Button or span not found for PID:', pid);
+					return; // Exit if elements are not found
+				}
+
+				const isApproved = $button.find('i').hasClass('fa-toggle-on') ? false : true; // toggle state
+
+				// Send the approval status to the server
+				$.ajax({
+					url: '/api/v3/posts/' + pid + '/approve',
+					method: 'PUT',
+					data: { 
+						isApproved: isApproved,
+						CSRF: csrfToken
+					},
+					headers: {
+						'x-csrf-token': csrfToken,
+						'X-CSRFToken': csrfToken
+					},
+					success: function(response) {
+						// Handle success (update UI accordingly)
+						// console.log("Approving successful. isApproved: ")
+						// console.log(isApproved);
+						// console.log("Response:");
+						// console.log(response);
+						if (response.isApproved) {
+							$button.find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
+							$span.text('Disapprove Post');
+						} else {
+							$button.find('i').removeClass('fa-toggle-off').addClass('fa-toggle-on');
+							$span.text('Approve Post');
+						}
+					},
+					error: function(err) {
+						console.error('Error updating post approval status', err);
+						// Optionally notify the user of the error
+						alert('An error occurred while updating the post approval status. Please try again.');
+					}
+				});
+			});
 </script>
-		`;
+`;
 
 		// Check if the content already contains the string for line 59
 		if (!content.includes(stringToAddAtLine59.trim())) {
