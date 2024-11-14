@@ -66,12 +66,14 @@ define('forum/topic', [
 		addParentHandler();
 		addRepliesHandler();
 		addPostsPreviewHandler();
+		configurePostToggle();
 		setupQuickReply();
 		handleBookmark(tid);
 		handleThumbs();
 
 		$(window).on('scroll', utils.debounce(updateTopicTitle, 250));
-		configurePostToggle();
+		
+		
 
 		handleTopicSearch();
 
@@ -82,6 +84,7 @@ define('forum/topic', [
         $(".topic").on("click", ".view-translated-btn", function () {
             // Toggle the visibility of the next .translated-content div
             $(this).closest('.sensitive-content-message').next('.translated-content').toggle();
+			console.log("Toggle btn clicked");
             // Optionally, change the button text based on visibility
             var isVisible = $(this).closest('.sensitive-content-message').next('.translated-content').is(':visible');
             if (isVisible) {
